@@ -1,21 +1,70 @@
 // app.js
 const express = require('express');
+const session = require('express-session');
 const path = require('path');
 const mysql = require('mysql2/promise');
 
 const app = express();
+app.use(express.urlencoded({ extended: true }));
+app.set("view engine", "ejs");
+
+app.use(
+  session({
+    secret: "secretkey123",
+    resave: false,
+    saveUninitialized: true
+  })
+);
+
+// Middleware: ensure DB login before accessing any route
+async function ensureDb(req, res, next) {
+  if (!req.session.dbConfig) return res.redirect('/db-login');
+
+  // Lazy-create connection pool only once
+  if (!req.app.locals.pool) {
+    req.app.locals.pool = mysql.createPool(req.session.dbConfig);
+  }
+  next();
+}
+
+// DB Login Form
+app.get('/db-login', (req, res) => {
+  res.render('dbLogin', { error: null });
+});
 
 // ---- CONFIG ----
 const PORT = 3000;
 
-const pool = mysql.createPool({
-  host: 'localhost',
-  user: 'your_mysql_user',
-  password: 'your_mysql_password',
-  database: 'your_database_name',
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0
+// Handle credentials
+app.post('/db-login', async (req, res) => {
+  const config = {
+    host: req.body.host,
+    user: req.body.user,
+    password: req.body.password,
+    database: req.body.database
+  };
+
+  try {
+    // Test connection
+    const pool = mysql.createPool(config);
+    await pool.query("SELECT 1");
+
+    req.session.dbConfig = config;
+    req.app.locals.pool = pool;
+
+    res.redirect('/');
+  } catch (err) {
+    res.render('dbLogin', { error: "Connection failed: " + err.message });
+  }
+});
+
+app.use((req, res, next) => {
+    if (req.path.startsWith("/db-login")) return next();
+    if (!req.session.dbConfig) return res.redirect("/db-login");
+    if (!req.app.locals.pool) {
+        req.app.locals.pool = mysql.createPool(req.session.dbConfig);
+    }
+    next();
 });
 
 // ---- MIDDLEWARE ----
