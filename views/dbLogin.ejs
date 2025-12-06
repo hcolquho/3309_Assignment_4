@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Database Login</title>
+</head>
+<body>
+  <h1>Enter MySQL Credentials</h1>
+
+  <form method="post" action="/db-login">
+    <label>Host: <input type="text" name="host" value="localhost" required></label><br>
+    <label>User: <input type="text" name="user" required></label><br>
+    <label>Password: <input type="password" name="password"></label><br>
+    <label>Database: <input type="text" name="database" required></label><br>
+    <button type="submit">Connect</button>
+  </form>
+
+  <% if (error) { %>
+    <p style="color:red;"><%= error %></p>
+  <% } %>
+</body>
+</html>

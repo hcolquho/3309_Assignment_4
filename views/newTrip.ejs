@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>New Trip</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <h1>Schedule Trip & Assign Driver/Vehicle</h1>
+  <a href="/">Back to Menu</a>
+
+  <% if (message) { %>
+    <p class="message"><%= message %></p>
+  <% } %>
+
+  <form method="post" action="/trip/new">
+    <fieldset>
+      <legend>Hub</legend>
+      <label>Hub:
+        <select name="hubID" required>
+          <% hubs.forEach(h => { %>
+            <option value="<%= h.hubID %>">
+              Hub <%= h.hubID %> - <%= h.city %>, <%= h.province %>
+            </option>
+          <% }) %>
+        </select>
+      </label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Driver</legend>
+      <label>Driver:
+        <select name="driverID" required>
+          <% drivers.forEach(d => { %>
+            <option value="<%= d.driverID %>">
+              <%= d.fName %> <%= d.lName %> (ID <%= d.driverID %>)
+            </option>
+          <% }) %>
+        </select>
+      </label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Vehicle</legend>
+      <label>Vehicle:
+        <select name="vehicleID" required>
+          <% vehicles.forEach(v => { %>
+            <option value="<%= v.vehicleID %>">
+              <%= v.make %> <%= v.model %> (ID <%= v.vehicleID %>)
+            </option>
+          <% }) %>
+        </select>
+      </label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Dispatch</legend>
+      <label>Dispatch Datetime:
+        <input type="datetime-local" name="dateDispatched" required>
+      </label>
+    </fieldset>
+
+    <button type="submit">Create Trip</button>
+  </form>
+</body>
+</html>

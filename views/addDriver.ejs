@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Add Driver</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <h1>Add New Driver</h1>
+  <a href="/">Back to Menu</a>
+
+  <% if (message) { %>
+    <p class="message"><%= message %></p>
+  <% } %>
+
+  <form method="post" action="/driver/new">
+    <fieldset>
+      <legend>Personal Info</legend>
+      <label>First Name:
+        <input type="text" name="fName" required>
+      </label><br>
+      <label>Last Name:
+        <input type="text" name="lName" required>
+      </label><br>
+      <label>Phone:
+        <input type="text" name="telNo" required>
+      </label><br>
+      <label>Email:
+        <input type="email" name="email">
+      </label><br>
+    </fieldset>
+
+    <fieldset>
+      <legend>Hub</legend>
+      <label>Hub:
+        <select name="hubID" required>
+          <% hubs.forEach(h => { %>
+            <option value="<%= h.hubID %>">
+              Hub <%= h.hubID %> - <%= h.city %>, <%= h.province %>
+            </option>
+          <% }) %>
+        </select>
+      </label>
+    </fieldset>
+
+    <fieldset>
+      <legend>License</legend>
+      <label>License Type:
+        <input type="text" name="licenseType" required>
+      </label><br>
+      <label>Expiry Date:
+        <input type="date" name="licenseExpiry" required>
+      </label>
+    </fieldset>
+
+    <fieldset>
+      <legend>Contract</legend>
+      <label>Start Date:
+        <input type="date" name="contractStart" required>
+      </label><br>
+      <label>Length (months):
+        <input type="number" name="contractLength" min="1" required>
+      </label>
+    </fieldset>
+
+    <button type="submit">Create Driver</button>
+  </form>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Vehicle Details</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <h1>Vehicle Details & Maintenance</h1>
+  <a href="/">Back to Menu</a>
+
+  <% if (!records || records.length === 0) { %>
+    <p>No vehicle or maintenance records found.</p>
+  <% } else { %>
+    <% const v = records[0]; %>
+    <h2>Vehicle</h2>
+    <table>
+      <tr><th>ID</th><td><%= v.vehicleID %></td></tr>
+      <tr><th>Make/Model</th><td><%= v.make %> <%= v.model %></td></tr>
+      <tr><th>Status</th><td><%= v.vehicleStatus %></td></tr>
+      <tr><th>Retired?</th><td><%= v.isRetired ? 'Yes' : 'No' %></td></tr>
+    </table>
+
+    <h2>Maintenance History</h2>
+    <table>
+      <tr>
+        <th>ID</th><th>Type</th><th>Cost</th><th>Provider</th>
+        <th>Date</th><th>Time</th><th>In Service</th>
+      </tr>
+      <% records.forEach(r => { %>
+        <% if (!r.activityID) return; %>
+        <tr>
+          <td><%= r.activityID %></td>
+          <td><%= r.maintenanceType %></td>
+          <td><%= r.cost %></td>
+          <td><%= r.serviceProvider %></td>
+          <td><%= r.maintenanceDate %></td>
+          <td><%= r.maintenanceTime || '' %></td>
+          <td><%= r.isInService ? 'Yes' : 'No' %></td>
+        </tr>
+      <% }) %>
+    </table>
+  <% } %>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Available Drivers</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <h1>Find Available Drivers by Hub & Date</h1>
+  <a href="/">Back to Menu</a>
+
+  <form method="get" action="/drivers/available">
+    <fieldset>
+      <legend>Search Criteria</legend>
+      <label>Hub:
+        <select name="hubID" required>
+          <option value="">-- Select Hub --</option>
+          <% hubs.forEach(h => { %>
+            <option value="<%= h.hubID %>" <%= (selectedHub == h.hubID) ? 'selected' : '' %>>
+              Hub <%= h.hubID %> - <%= h.city %>, <%= h.province %>
+            </option>
+          <% }) %>
+        </select>
+      </label><br>
+      <label>Reference Date:
+        <input type="date" name="refDate" value="<%= selectedDate %>" required>
+      </label>
+    </fieldset>
+
+    <button type="submit">Find Drivers</button>
+  </form>
+
+  <% if (drivers && drivers.length > 0) { %>
+    <h2>Available Drivers</h2>
+    <table>
+      <tr>
+        <th>ID</th><th>Name</th><th>Phone</th><th>Email</th>
+        <th>Hub City</th><th>Hub Province</th>
+        <th>License Expiry</th><th>Contract End</th>
+      </tr>
+      <% drivers.forEach(d => { %>
+        <tr>
+          <td><%= d.driverID %></td>
+          <td><%= d.fName %> <%= d.lName %></td>
+          <td><%= d.telNo %></td>
+          <td><%= d.email %></td>
+          <td><%= d.city %></td>
+          <td><%= d.province %></td>
+          <td><%= d.expiryDate.toISOString().slice(0,10) %></td>
+          <td><%= d.contractEndDate.toISOString().slice(0,10) %></td>
+        </tr>
+      <% }) %>
+    </table>
+  <% } else if (selectedHub && selectedDate) { %>
+    <p>No available drivers for that hub/date.</p>
+  <% } %>
+</body>
+</html>

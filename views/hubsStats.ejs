@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Hub Statistics</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <h1>Hub Package & Trip Statistics</h1>
+  <a href="/">Back to Menu</a>
+
+  <form method="get" action="/hubs/stats">
+    <fieldset>
+      <legend>Sort Options</legend>
+      <label>Sort by:
+        <select name="sortBy">
+          <option value="hubID" <%= sortBy === 'hubID' ? 'selected' : '' %>>Hub ID</option>
+          <option value="packages" <%= sortBy === 'packages' ? 'selected' : '' %>>Total Packages</option>
+          <option value="trips" <%= sortBy === 'trips' ? 'selected' : '' %>>Completed Trips</option>
+        </select>
+      </label>
+    </fieldset>
+    <button type="submit">Show Stats</button>
+  </form>
+
+  <table>
+    <tr>
+      <th>Hub ID</th><th>City</th><th>Province</th>
+      <th>Total Jobs</th><th>Total Packages</th>
+      <th>Total Weight</th><th>Total Volume</th>
+      <th>Active Trips</th><th>Completed Trips</th>
+    </tr>
+    <% stats.forEach(s => { %>
+      <tr>
+        <td><%= s.hubID %></td>
+        <td><%= s.city %></td>
+        <td><%= s.province %></td>
+        <td><%= s.totalJobs %></td>
+        <td><%= s.totalPackages %></td>
+        <td><%= s.totalWeight %></td>
+        <td><%= s.totalVolume %></td>
+        <td><%= s.activeTrips %></td>
+        <td><%= s.completedTrips %></td>
+      </tr>
+    <% }) %>
+  </table>
+</body>
+</html>

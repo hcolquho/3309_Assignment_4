@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Trip Details</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <h1>Trip Details</h1>
+  <a href="/">Back to Menu</a>
+
+  <% if (!records || records.length === 0) { %>
+    <p>No such trip.</p>
+  <% } else { %>
+    <table>
+      <tr>
+        <th>TripID</th><th>Hub</th><th>Dispatched</th><th>Completed</th><th>Status</th>
+        <th>Driver</th><th>Driver Status</th>
+        <th>Vehicle</th><th>Vehicle Status</th>
+      </tr>
+      <% records.forEach(r => { %>
+        <tr>
+          <td><%= r.tripID %></td>
+          <td><%= r.hubID %></td>
+          <td><%= r.dateDispatched %></td>
+          <td><%= r.dateCompleted || '' %></td>
+          <td><%= r.tripStatus %></td>
+          <td><%= r.fName %> <%= r.lName %> (ID <%= r.driverID %>)</td>
+          <td><%= r.availabilityStatus %></td>
+          <td><%= r.make %> <%= r.model %> (ID <%= r.vehicleID %>)</td>
+          <td><%= r.vehicleStatus %></td>
+        </tr>
+      <% }) %>
+    </table>
+  <% } %>
+</body>
+</html>
